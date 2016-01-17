@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "timers.hpp"
+#include "GPIOClass.hpp"
 
 // g++ -o main main.cpp timers.cpp
 
@@ -22,6 +23,11 @@ int main(void)
 	int i=0;
 	int count=0, sec=0;
 
+
+	GPIOClass* gpio4 = new GPIOClass("4");	//create new GPIO object to be attached to  GPIO4
+    gpio4->export_gpio(); 					//export GPIO4
+	gpio4->setdir_gpio("out");				//GPIO4 set to output
+
 	if (timers == 0)
 		timers = timers->getInstance(nmbtmrs);
 
@@ -35,9 +41,13 @@ int main(void)
 		count++;
 		if (timers->get100msTimer(tfirst) >= 10)
 		{
-			std::cout << "sec = " << sec++ << " count = " << count << std::endl;
-			count = 0;
-			timers->clr100msTimer(tfirst);
+			gpio4->setval_gpio("1");
+			if (timers->get100msTimer(tfirst) >= 20)
+				timers->clr100msTimer(tfirst);
+		}
+		else
+		{
+			gpio4->setval_gpio("0");
 		}
 	}
 	return 0;
