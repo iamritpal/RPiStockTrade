@@ -1,3 +1,8 @@
+//*****************************************
+//	Software Engineer - Amritpal Singh
+//	Date - 01-17-2016
+//*****************************************
+
 #include <iostream>
 #include "timers.hpp"
 
@@ -18,23 +23,21 @@ int main(void)
 	int count=0, sec=0;
 
 	if (timers == 0)
-		timers = timers->Instance(nmbtmrs);
+		timers = timers->getInstance(nmbtmrs);
 
-	timers->config();
+	timers->init();		// Initialize timers
+	timers->config();	// Configure timers to work for 10ms and 100ms counters
 
 	for(;;)
 	{
 		timers->incTime();		// Always check if timers need to be incremented
 
-		if (timers->get10msTimer(tfirst) != 0)
+		count++;
+		if (timers->get100msTimer(tfirst) >= 10)
 		{
-			timers->clr10msTimer(tfirst);
-			count++;
-			if (count >= 10)
-			{
-				count = 0;
-				std::cout << sec++ << std::endl;				
-			}
+			std::cout << "sec = " << sec++ << " count = " << count << std::endl;
+			count = 0;
+			timers->clr100msTimer(tfirst);
 		}
 	}
 	return 0;

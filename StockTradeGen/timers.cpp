@@ -1,8 +1,12 @@
+//*****************************************
+//	Software Engineer - Amritpal Singh
+//	Date - 01-17-2016
+//*****************************************
+
 #include <iostream>
 #include "timers.hpp"
 
 int Timers::updateTime = 0;
-
 Timers* Timers::m_pInstance = NULL;
 
 // Timers constructor
@@ -16,11 +20,22 @@ Timers::Timers(int max)
 	timer100ms.resize(max);
 }
 
-Timers* Timers::Instance(int max)
+Timers* Timers::getInstance(int max)
 {
 	if (!m_pInstance)   		// Only allow one instance of class to be generated.
 		m_pInstance = new Timers(max);
 	return m_pInstance;
+}
+
+void Timers::init(void)
+{
+	int i;
+
+	for (i=0;i<nmbTimers;i++)
+	{
+		timer10ms[i] = 0;
+		timer100ms[i] = 0;
+	}
 }
 
 // Configure Timers
