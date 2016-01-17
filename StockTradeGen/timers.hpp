@@ -19,6 +19,7 @@ class Timers
 		void incTime(void);						// increment timers
 		static void timer_handler(int s);		//
 		unsigned short getTimer(int tnmb);		// get ms timer
+		int getUpdateTime(void);
 };
 
 #endif

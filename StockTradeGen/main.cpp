@@ -15,11 +15,23 @@ Timers msTimers(nmbtmrs);		// Create ms timers
 int main(void)
 {
 	int i=0;
+	int count=0;
 
 	msTimers.config();
 
 	for(;;)
-	{}
+	{
+		if (msTimers.getUpdateTime() != 0)
+		{
+			msTimers.incTime();
+		}
+
+		if (count >= 10)
+		{
+			count = 0;			
+			std::cout << "tfirst = " << msTimers.getTimer(tfirst) << std::endl;
+		}
+	}
 
 	/*
 

@@ -35,10 +35,11 @@ void Timers::config(void)
 void Timers::timer_handler(int s)
 {
 	struct itimerval tout_val;
+	
+	updateTime = 1;
 
-	std::cout << "\n%d sec up partner, Wakeup!!!\n" << std::endl;
 	tout_val.it_value.tv_sec = 0; 
-	tout_val.it_value.tv_usec = 10000;	/* 10 useconds timer */
+	tout_val.it_value.tv_usec = 10000;	/* 10 milli timer */
 	tout_val.it_interval.tv_sec = 0;
 	tout_val.it_interval.tv_usec = 0;
 
@@ -56,7 +57,7 @@ void Timers::incTime(void)
 		timer[i]++;
 		i++;		
 	}
-
+	updateTime = 0;
 }
 
 // Get timer value
@@ -64,4 +65,9 @@ void Timers::incTime(void)
 unsigned short Timers::getTimer(int tnmb)
 {
 	return timer[tnmb];
+}
+
+int Timers::getUpdateTime(void)
+{
+	return updateTime;
 }
