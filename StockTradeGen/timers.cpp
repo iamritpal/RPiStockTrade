@@ -8,8 +8,10 @@ int Timers::updateTime = 0;
 Timers::Timers(int max)
 {
 	updateTime = 0;
+	counter10ms = 0;
 	nmbTimers = max;
-	timer.resize(max);		// resize vector
+	timer10ms.resize(max);		// resize vector
+	timer100ms.resize(max);
 }
 
 // Configure Timers
@@ -38,8 +40,10 @@ void Timers::timer_handler(int s)
 	
 	updateTime = 1;
 
+	// set for counter10ms 100 counts per second
+
 	tout_val.it_value.tv_sec = 0; 
-	tout_val.it_value.tv_usec = 10000;	/* 10 milli timer */
+	tout_val.it_value.tv_usec = 10000;	/* 10000 for 10 milli timer */
 	tout_val.it_interval.tv_sec = 0;
 	tout_val.it_interval.tv_usec = 0;
 
@@ -52,22 +56,42 @@ void Timers::timer_handler(int s)
 void Timers::incTime(void)
 {
 	int i=0;
-	while (i < nmbTimers)
+	if (updateTime != 0)
 	{
-		timer[i]++;
-		i++;		
+		updateTime = 0;
+		counter10ms++;
+		while (i < nmbTimers)
+			timer10ms[i++]++;
+		if (counter10ms >= 10)
+		{
+			i=0;
+			while (i < nmbTimers)
+				timer100ms[i++]++;
+			counter10ms = 0;
+		}
 	}
-	updateTime = 0;
 }
 
-// Get timer value
+// Get 10ms timer value
 
-unsigned short Timers::getTimer(int tnmb)
+unsigned short Timers::get10msTimer(int tnmb)
 {
-	return timer[tnmb];
+	return timer10ms[tnmb];
 }
 
-int Timers::getUpdateTime(void)
+// Get 100ms timer value
+
+unsigned short Timers::get100msTimer(int tnmb)
 {
-	return updateTime;
+	return timer100ms[tnmb];
+}
+
+void Timers::clr10msTimer(int tnmb)
+{
+	timer10ms[tnmb] = 0;
+}
+
+void Timers::clr100msTimer(int tnmb)
+{
+	timer100ms[tnmb] = 0;
 }
