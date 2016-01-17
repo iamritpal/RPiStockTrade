@@ -23,10 +23,9 @@ int main(void)
 	int i=0;
 	int count=0, sec=0;
 
-
-	GPIOClass* gpio4 = new GPIOClass("4");	//create new GPIO object to be attached to  GPIO4
-    gpio4->export_gpio(); 					//export GPIO4
-	gpio4->setdir_gpio("out");				//GPIO4 set to output
+	GPIOClass* gpio4 = new GPIOClass("4");	// Create new GPIO object to be attached to  GPIO4
+    gpio4->export_gpio(); 					// Export GPIO4
+	gpio4->setdir_gpio("out");				// GPIO4 set to output
 
 	if (timers == 0)
 		timers = timers->getInstance(nmbtmrs);
@@ -39,11 +38,11 @@ int main(void)
 		timers->incTime();		// Always check if timers need to be incremented
 
 		count++;
-		if (timers->get100msTimer(tfirst) >= 10)
+		if (timers->get10msTimer(tfirst) != 0)
 		{
 			gpio4->setval_gpio("1");
-			if (timers->get100msTimer(tfirst) >= 20)
-				timers->clr100msTimer(tfirst);
+			if (timers->get10msTimer(tfirst) >= 2)
+				timers->clr10msTimer(tfirst);
 		}
 		else
 		{
