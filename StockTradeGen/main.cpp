@@ -10,40 +10,32 @@ enum Timer {
 	nmbtmrs
 };
 
-Timers timer(nmbtmrs);		// Create ms timers
+Timers *timers = 0;
 
 int main(void)
 {
 	int i=0;
 	int count=0, sec=0;
 
-	timer.config();
+	if (timers == 0)
+		timers = timers->Instance(nmbtmrs);
+
+	timers->config();
 
 	for(;;)
 	{
-		timer.incTime();
+		timers->incTime();		// Always check if timers need to be incremented
 
-		if (timer.get10msTimer(tfirst) != 0)
+		if (timers->get10msTimer(tfirst) != 0)
 		{
-			timer.clr10msTimer(tfirst);
+			timers->clr10msTimer(tfirst);
 			count++;
-			if (count >= 100)
+			if (count >= 10)
 			{
 				count = 0;
 				std::cout << sec++ << std::endl;				
 			}
 		}
 	}
-
-	/*
-
-	while(i < 10)
-	{
-		msTimers.incTime();
-		i++;
-	}
-
-	std::cout << msTimers.getTimer(0);
-	*/
 	return 0;
 }

@@ -3,6 +3,8 @@
 
 int Timers::updateTime = 0;
 
+Timers* Timers::m_pInstance = NULL;
+
 // Timers constructor
 
 Timers::Timers(int max)
@@ -12,6 +14,13 @@ Timers::Timers(int max)
 	nmbTimers = max;
 	timer10ms.resize(max);		// resize vector
 	timer100ms.resize(max);
+}
+
+Timers* Timers::Instance(int max)
+{
+	if (!m_pInstance)   		// Only allow one instance of class to be generated.
+		m_pInstance = new Timers(max);
+	return m_pInstance;
 }
 
 // Configure Timers
