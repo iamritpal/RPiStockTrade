@@ -4,6 +4,7 @@
 //*****************************************
 
 #include <iostream>
+#include "comm.hpp"
 #include "timers.hpp"
 #include "GPIOClass.hpp"
 
@@ -17,6 +18,7 @@ enum Timer {
 };
 
 Timers *timers = 0;
+Comm uart(5000);
 
 int main(void)
 {
@@ -27,26 +29,36 @@ int main(void)
     gpio4->export_gpio(); 					// Export GPIO4
 	gpio4->setdir_gpio("out");				// GPIO4 set to output
 
-	if (timers == 0)
-		timers = timers->getInstance(nmbtmrs);
+	
+	// Get an instance of the timers class
+	timers = timers->getInstance(nmbtmrs);
 
 	timers->init();		// Initialize timers
 	timers->config();	// Configure timers to work for 10ms and 100ms counters
+
+	// Uart initialize and configure
+	uart.init();
 
 	for(;;)
 	{
 		timers->incTime();		// Always check if timers need to be incremented
 
 		count++;
-		if (timers->get10msTimer(tfirst) != 0)
+		if (timers->get100msTimer(tfirst) != 0)
 		{
+			timers->clr100msTimer(tfirst);
+
 			gpio4->setval_gpio("1");
-			if (timers->get10msTimer(tfirst) >= 2)
-				timers->clr10msTimer(tfirst);
-		}
-		else
-		{
+			
+			int i=0;
+			uart.clrTxBuffer();
+			while (i < 2000)
+			{
+				uart.addTxByte(2);
+				i++;
+			}
 			gpio4->setval_gpio("0");
+			
 		}
 	}
 	return 0;
