@@ -13,8 +13,8 @@ class Comm
 {
 	private:
 		int maxSize;
-		int rxIx;
-		int txIx;
+		unsigned short rxIx;
+		unsigned short txIx;
 		std::vector<unsigned short> rxbuffer;
 		std::vector<unsigned short> txbuffer;
 		static Comm* m_pInstance;
@@ -28,6 +28,7 @@ class Comm
 		void clrRxBuffer(void);
 		void addTxByte(unsigned short byte);
 		void addRxByte(unsigned short byte);
+		void setTxPacketLength(void);
 		void send(void);
 		void recieve(void);
 };

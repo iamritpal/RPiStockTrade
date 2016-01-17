@@ -7,6 +7,8 @@
 #include "comm.hpp"
 #include "timers.hpp"
 #include "GPIOClass.hpp"
+#include "packets.hpp"
+#include "globals.h"
 
 // g++ -o main main.cpp timers.cpp
 
@@ -19,13 +21,13 @@ enum Timer {
 
 Timers *timers = 0;
 
-#define COMMBUFFSIZE 3000
 Comm *uart = 0;
+
+
 
 int main(void)
 {
 	int i=0;
-	int count=0, sec=0;
 
 	GPIOClass* gpio4 = new GPIOClass("4");	// Create new GPIO object to be attached to  GPIO4
     gpio4->export_gpio(); 					// Export GPIO4
@@ -42,26 +44,20 @@ int main(void)
 	uart = uart->getInstance(COMMBUFFSIZE);
 	uart->init();
 
+	// gpio4->setval_gpio("1");		// Turn ON Pin4
+	// gpio4->setval_gpio("0");		// Turn OFF Pin4
+
+	// Packets generator object
+	Packets packets;
+
 	for(;;)
 	{
 		timers->incTime();		// Always check if timers need to be incremented
 
-		count++;
 		if (timers->get100msTimer(tfirst) != 0)
 		{
+			packets.generate();
 			timers->clr100msTimer(tfirst);
-
-			gpio4->setval_gpio("1");
-			
-			int i=0;
-			uart->clrTxBuffer();
-			while (i < 2000)
-			{
-				uart->addTxByte(2);
-				i++;
-			}
-			gpio4->setval_gpio("0");
-			
 		}
 	}
 	return 0;

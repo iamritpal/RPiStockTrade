@@ -55,3 +55,8 @@ void Comm::addRxByte(unsigned short byte)
 {
 	rxbuffer[rxIx++] = byte;
 }
+
+void Comm::setTxPacketLength(void)
+{
+	txbuffer[3] = txIx;
+}
