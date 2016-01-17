@@ -6,6 +6,8 @@
 #include <iostream>
 #include "comm.hpp"
 
+Comm* Comm::m_pInstance = NULL;
+
 // Default constructor
 
 Comm::Comm(int max)
@@ -13,6 +15,13 @@ Comm::Comm(int max)
 	maxSize = max;
 	rxbuffer.resize(maxSize);		// resize vector
 	txbuffer.resize(maxSize);
+}
+
+Comm* Comm::getInstance(int max)
+{
+	if (!m_pInstance)   		// Only allow one instance of class to be generated.
+		m_pInstance = new Comm(max);
+	return m_pInstance;
 }
 
 void Comm::init(void)

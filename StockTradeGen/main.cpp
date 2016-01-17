@@ -18,7 +18,9 @@ enum Timer {
 };
 
 Timers *timers = 0;
-Comm uart(5000);
+
+#define COMMBUFFSIZE 3000
+Comm *uart = 0;
 
 int main(void)
 {
@@ -37,7 +39,8 @@ int main(void)
 	timers->config();	// Configure timers to work for 10ms and 100ms counters
 
 	// Uart initialize and configure
-	uart.init();
+	uart = uart->getInstance(COMMBUFFSIZE);
+	uart->init();
 
 	for(;;)
 	{
@@ -51,10 +54,10 @@ int main(void)
 			gpio4->setval_gpio("1");
 			
 			int i=0;
-			uart.clrTxBuffer();
+			uart->clrTxBuffer();
 			while (i < 2000)
 			{
-				uart.addTxByte(2);
+				uart->addTxByte(2);
 				i++;
 			}
 			gpio4->setval_gpio("0");

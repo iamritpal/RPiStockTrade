@@ -17,11 +17,13 @@ class Comm
 		int txIx;
 		std::vector<unsigned short> rxbuffer;
 		std::vector<unsigned short> txbuffer;
-
+		static Comm* m_pInstance;
+		Comm(int max);
 
 	public:
-		Comm(int max);
+		Comm* getInstance(int max);
 		void init(void);
+		void config(void);
 		void clrTxBuffer(void);
 		void clrRxBuffer(void);
 		void addTxByte(unsigned short byte);
