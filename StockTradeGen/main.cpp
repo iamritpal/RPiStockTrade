@@ -23,7 +23,7 @@ Timers *timers = 0;
 
 Comm *uart = 0;
 
-
+int packetInBuff=0;
 
 int main(void)
 {
@@ -43,6 +43,7 @@ int main(void)
 	// Uart initialize and configure
 	uart = uart->getInstance(COMMBUFFSIZE);
 	uart->init();
+	uart->config();
 
 	// gpio4->setval_gpio("1");		// Turn ON Pin4
 	// gpio4->setval_gpio("0");		// Turn OFF Pin4
@@ -54,11 +55,21 @@ int main(void)
 	{
 		timers->incTime();		// Always check if timers need to be incremented
 
-		if (timers->get100msTimer(tfirst) != 0)
+		if (timers->get10msTimer(tfirst) != 0)
 		{
-			packets.generate();
-			timers->clr100msTimer(tfirst);
+			if (packetInBuff == 0)
+			{
+				packets.generate();
+				packetInBuff = 1;		
+			}
+			if (timers->get10msTimer(tfirst) >= 2)
+			{
+				uart->transmit();
+				timers->clr10msTimer(tfirst);
+				packetInBuff = 0;
+			}
 		}
 	}
 	return 0;
 }
+

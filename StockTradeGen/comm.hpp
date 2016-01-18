@@ -15,8 +15,9 @@ class Comm
 		int maxSize;
 		unsigned short rxIx;
 		unsigned short txIx;
-		std::vector<unsigned short> rxbuffer;
-		std::vector<unsigned short> txbuffer;
+		int uart0_filestream;
+		std::vector<unsigned char> rxbuffer;
+		std::vector<unsigned char> txbuffer;
 		static Comm* m_pInstance;
 		Comm(int max);
 
@@ -26,11 +27,13 @@ class Comm
 		void config(void);
 		void clrTxBuffer(void);
 		void clrRxBuffer(void);
-		void addTxByte(unsigned short byte);
-		void addRxByte(unsigned short byte);
+		void addTxByte(unsigned char byte);
+		void addRxByte(unsigned char byte);
 		void setTxPacketLength(void);
 		void send(void);
 		void recieve(void);
+		void transmit(void);
+		void printtxbuff(void);
 };
 
 #endif
