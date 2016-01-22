@@ -5,6 +5,11 @@
 Packets::Packets()
 {
 	uart = uart->getInstance(COMMBUFFSIZE);
+	
+	// Initialize packets queue
+	pkts_in_que = 0;
+	pkts_que_pix = 0;
+	pkts_que_gix = 0;
 }
 
 void Packets::generate(void)
@@ -57,4 +62,31 @@ void Packets::createPacket(int packetNmb)
 	}
 	uart->addTxByte('@');			// Test payload byte 6
 	uart->setTxPacketLength();
+}
+
+int Packets::enquePktRequest(int pkt_no)
+{
+	if (pkts_in_que < 100)
+	{
+		pkts_que_pix++;
+		if (pkts_que_pix >= 100)
+			pkts_que_pix = 0;
+		request_que[pkts_que_pix] = pkt_no;
+		pkts_in_que++;
+		return(1);
+	}
+	return(0);
+}
+
+int Packets::dequePktRequest(void)
+{
+	if (pkts_in_que != 0)
+	{
+		pkts_que_gix++;
+		if (pkts_que_gix >= 100)
+			pkts_que_gix = 0;
+		pkts_in_que--;
+		return(request_que[pkts_que_gix]);
+	}
+	return(0)
 }
