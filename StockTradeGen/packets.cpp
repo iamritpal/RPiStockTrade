@@ -14,12 +14,11 @@ Packets::Packets()
 
 void Packets::generate(void)
 {
-	static int i=1;
-	createPacket(i);
-	if (i == 1)
-		i = 2;
-	else
-		i = 1;
+	int i;
+	
+	i=dequePktRequest(); 
+	if (i != 0)
+		createPacket(i);
 }
 
 void Packets::createPacket(int packetNmb)
