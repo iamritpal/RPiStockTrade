@@ -40,7 +40,12 @@ void Curl::refresh()
     curl_multi_perform(multi_handle, &still_running);
 }
 
-void Curl::AddGetRequest(const std::string &url)
+void Curl::AddUrlToList(int ix, const std::string &url)
+{
+    urls[ix] = url;
+}
+
+void Curl::AddGetRequest(int ix)
 {
     CURLcode res;
 
@@ -49,7 +54,7 @@ void Curl::AddGetRequest(const std::string &url)
         int i = nmbHandles;
         handles[i] = curl_easy_init();
 
-        res = curl_easy_setopt(handles[i], CURLOPT_URL, url.c_str());
+        res = curl_easy_setopt(handles[i], CURLOPT_URL, urls[ix].c_str());
         if (res != CURLE_OK)
             throw Exception(res);
 

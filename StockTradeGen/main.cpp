@@ -11,7 +11,7 @@
 #include "Stocks.hpp"
 #include "globals.h"
 
-// g++ -o main main.cpp timers.cpp
+// sudo g++ -o main *.cpp -lcurl
 
 enum Timer { 
 	tfirst,
@@ -63,11 +63,12 @@ int main(void)
 	{
 		timers->incTime();		// Always check if timers need to be incremented
 
+		packets.generate();
+
 		if (timers->get10msTimer(tfirst) != 0)
 		{
 			if (packetInBuff == 0)
 			{
-				packets.generate();
 				packetInBuff = 1;		
 			}
 			if (timers->get10msTimer(tfirst) >= 2)

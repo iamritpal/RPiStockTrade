@@ -131,9 +131,5 @@ void Comm::transmit(void)
 		{
 			std::cout << "UART TX error\n";
 		}
-		else
-		{
-			std::cout << "\n bytes sent = " << count << std::endl;
-		}
 	}
 }

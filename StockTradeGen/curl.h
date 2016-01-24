@@ -23,7 +23,8 @@ class Curl
         void refresh();
         int isRunning();
         static int write_data_cb(char *data, size_t size, size_t nmemb, std::string *buffer);
-        void AddGetRequest(const std::string &url);
+        void AddGetRequest(int ix);
+        void AddUrlToList(int ix, const std::string &url);
         void checkHandleStatus(void);
         int still_running;
         int nmbHandles;

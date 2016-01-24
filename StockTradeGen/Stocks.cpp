@@ -39,6 +39,13 @@ void Stocks::init(void)
 	for (i=0;i<10;i++)
 		stock[i].setStockPrice(0);
 
+   for (i=0;i<10;i++)
+   {
+      url = "http://www.google.com/finance/info?q=NSE:";
+      url += stock[i].getStockTicker();
+      httpGet->AddUrlToList(i,url);
+   }
+
 }
 
 int Stocks::requestStatus(void)
@@ -60,20 +67,19 @@ void Stocks::requestUpdate(void)
 	int i=0;
 	
 	httpGet->init();	// Initialize curl request
-	
-	for (i=0;i<10;i++)
-	{
-		url = "http://www.google.com/finance/info?q=NSE:";
-		url += stock[i].getStockTicker();
-		httpGet->AddGetRequest(url);
-	}
+
+   for (i=0;i<10;i++)
+   {
+      httpGet->AddGetRequest(i);
+   }
+
 	httpGet->refresh();	// Start request
 }
 
 void Stocks::getStockInfo(int ix, StockNode* nodeObj)
 {
 	nodeObj->setStockPrice(stock[ix].getStockPrice());
-	nodeObj->setStockTicker(stock[ix].getStockTicker());
+	//nodeObj->setStockTicker(stock[ix].getStockTicker());
 }
 
 void Stocks::rdStockData(int ix, const std::string& input)
