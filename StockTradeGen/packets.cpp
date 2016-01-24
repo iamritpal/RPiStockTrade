@@ -43,8 +43,9 @@ void Packets::generate(void)
 				{
 					stock->getStockInfo(i,&gstock);
 					//enquePktRequest()
-					//std::cout<<gstock.getStockPrice()<<std::endl;
+					std::cout<<gstock.getStockPrice()<<" ";
 				}
+				stock->clearCurl();
 				putReq = 0;
 			}
 		}

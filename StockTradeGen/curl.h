@@ -26,6 +26,7 @@ class Curl
         void AddGetRequest(int ix);
         void AddUrlToList(int ix, const std::string &url);
         void checkHandleStatus(void);
+        void clear(void);
         int still_running;
         int nmbHandles;
         std::string m_data[10];
@@ -36,7 +37,7 @@ class Curl
     private:
         Curl();
         Curl(const Curl &);         // No compiler-generated copy constructor
-        CURL* handles[10];
+        CURL *handles[10];
         CURLM *multi_handle;
         CURLMsg *msg;               // For picking up messages with the transfer status        
         int msgs_left;              // how many messages are left

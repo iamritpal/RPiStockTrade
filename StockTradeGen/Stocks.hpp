@@ -18,9 +18,11 @@ class Stocks
 		~Stocks();
 		void init(void);
 		int requestStatus(void);
+		void clearCurl(void);
 		void requestUpdate(void);
 		void getStockInfo(int ix, StockNode* nodeObj);
 		void rdStockData(int ix, const std::string& input);
+		void rdGFStockData(int ix, const std::string& input);
         static Stocks* m_pInstance;
 };
 

@@ -25,13 +25,34 @@ Curl::~Curl()
 
     /* Free the CURL handles */ 
     for (i=0; i<nmbHandles; i++)
+    {
+        curl_multi_remove_handle(multi_handle, handles[i]);
         curl_easy_cleanup(handles[i]);
+    }
+
+}
+
+void Curl::clear(void)
+{
+    int i;
+    curl_multi_cleanup(multi_handle);
+
+    /* Free the CURL handles */ 
+    for (i=0; i<nmbHandles; i++)
+    {
+        curl_multi_remove_handle(multi_handle, handles[i]);
+        curl_easy_cleanup(handles[i]);
+    }
 }
 
 void Curl::init(void)
 {
     nmbHandles = 0;
     still_running = 0;
+
+    multi_handle = curl_multi_init();
+    if (multi_handle == NULL)
+        throw Exception("Unable to initialize curl handler");
 }
 
 void Curl::refresh()
@@ -52,6 +73,7 @@ void Curl::AddGetRequest(int ix)
     if (nmbHandles < 10)
     {
         int i = nmbHandles;
+        m_data[i].clear();
         handles[i] = curl_easy_init();
 
         res = curl_easy_setopt(handles[i], CURLOPT_URL, urls[ix].c_str());
