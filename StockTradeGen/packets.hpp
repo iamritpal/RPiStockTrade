@@ -2,11 +2,15 @@
 #define PACKETS_H
 
 #include "comm.hpp"
+#include "Stocks.hpp"
+#include "StockNode.hpp"
 
 class Packets
 {
 	private:
 		Comm *uart;
+		Stocks *stock;
+		StockNode gstock;
 		int request_que[100];
 		int pkts_in_que;
 		int pkts_que_pix;

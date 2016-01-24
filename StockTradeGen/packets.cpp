@@ -5,6 +5,7 @@
 Packets::Packets()
 {
 	uart = uart->getInstance(COMMBUFFSIZE);
+	stock = stock->getInstance();
 	
 	// Initialize packets queue
 	pkts_in_que = 0;
@@ -15,10 +16,38 @@ Packets::Packets()
 void Packets::generate(void)
 {
 	int i;
-	
+	static int ix=0;
+	static int putReq=0;
+
 	i=dequePktRequest(); 
 	if (i != 0)
 		createPacket(i);
+	else	// Queue is empty
+	{
+		if (putReq == 0)
+		{
+			putReq = 1;
+			stock->requestUpdate();
+		}
+		else
+		{
+			if (putReq == 1)
+			{
+				if (stock->requestStatus() != 0)
+					putReq = 2;
+			}
+			else
+			{
+				std::cout << "index = " << ix++ << std::endl; 
+				for (i=0;i<10;i++)
+				{
+					stock->getStockInfo(i,&gstock);
+					std::cout<<gstock.getStockPrice()<<std::endl;
+				}
+				putReq = 0;
+			}
+		}
+	}
 }
 
 void Packets::createPacket(int packetNmb)
@@ -87,5 +116,5 @@ int Packets::dequePktRequest(void)
 		pkts_in_que--;
 		return(request_que[pkts_que_gix]);
 	}
-	return(0)
+	return(0);
 }

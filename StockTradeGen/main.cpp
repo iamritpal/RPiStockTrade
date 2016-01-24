@@ -8,6 +8,7 @@
 #include "timers.hpp"
 #include "GPIOClass.hpp"
 #include "packets.hpp"
+#include "Stocks.hpp"
 #include "globals.h"
 
 // g++ -o main main.cpp timers.cpp
@@ -22,6 +23,8 @@ enum Timer {
 Timers *timers = 0;
 
 Comm *uart = 0;
+
+Stocks *stocks = 0;
 
 int packetInBuff=0;
 
@@ -48,8 +51,13 @@ int main(void)
 	// gpio4->setval_gpio("1");		// Turn ON Pin4
 	// gpio4->setval_gpio("0");		// Turn OFF Pin4
 
+	stocks = stocks->getInstance();
+	stocks->init();
+
 	// Packets generator object
 	Packets packets;
+
+	std::cout<<"test"<<std::endl;
 
 	for(;;)
 	{
